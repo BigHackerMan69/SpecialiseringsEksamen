@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SpecialiseringsEksamen.ViewModels"
+             x:Class="SpecialiseringsEksamen.Views.MainPage"
+             x:DataType="vm:MainViewModel">
+    <ContentPage.Content>
+        <StackLayout Padding="20" Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
+            <Label Text="Hospital Locker System"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="DarkBlue"/>
+
+            <Label Text="Enter Locker ID:"
+                   FontSize="18"
+                   HorizontalOptions="Center"
+                   TextColor="DarkGray"/>
+
+            <Entry x:Name="LockerIdEntry"
+                   Placeholder="Locker ID"
+                   FontSize="18"
+                   HorizontalOptions="FillAndExpand"
+                   TextColor="Black"/>
+
+            <Button Text="Unlock Locker"
+                    FontSize="18"
+                    FontAttributes="Bold"
+                    BackgroundColor="DarkBlue"
+                    TextColor="White"
+                    CornerRadius="10"
+                    VerticalOptions="Center"
+                    Clicked="UnlockLockerButton_Clicked"/>
+
+            <ActivityIndicator x:Name="ActivityIndicator"
+                               IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Color="DarkBlue"
+                               VerticalOptions="Center"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
