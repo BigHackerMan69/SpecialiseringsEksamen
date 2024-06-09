@@ -17,13 +17,6 @@ namespace SpecialiseringsEksamen.Views
             TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
             Vibration.Default.Vibrate(vibrationLength);
 
-            var lockerId = LockerIdEntry.Text;
-
-            if (string.IsNullOrWhiteSpace(lockerId))
-            {
-                await DisplayAlert("Error", "Please enter a valid Locker ID.", "OK");
-                return;
-            }
 
             var viewModel = BindingContext as MainViewModel;
             viewModel.IsBusy = true;
@@ -32,7 +25,7 @@ namespace SpecialiseringsEksamen.Views
 
             viewModel.IsBusy = false;
 
-            await DisplayAlert("Success", $"Locker {lockerId} has been unlocked.", "OK");
+            await DisplayAlert("Success", $"Your locker has been unlocked.", "OK");
         }
     }
 }

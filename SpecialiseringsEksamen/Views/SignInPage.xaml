@@ -1,42 +1,55 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:SpecialiseringsEksamen.ViewModels"
-             x:Class="SpecialiseringsEksamen.Views.MainPage"
-             x:DataType="vm:MainViewModel">
+             x:Class="SpecialiseringsEksamen.Views.SignInPage"
+             x:DataType="vm:LoginViewModel">
     <ContentPage.BindingContext>
-        <vm:MainViewModel />
+        <vm:LoginViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
-            <Label Text="Hospital Locker App"
+            <Label Text="Login"
                    FontSize="28"
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
                    TextColor="DarkBlue"/>
 
-            <Button Text="Unlock Locker"
+            <Entry Placeholder="Username"
+                   Text="{Binding Username}"
+                   FontSize="18"
+                   HorizontalOptions="FillAndExpand"
+                   TextColor="Black"/>
+
+            <Entry Placeholder="Password"
+                   Text="{Binding Password}"
+                   IsPassword="True"
+                   FontSize="18"
+                   HorizontalOptions="FillAndExpand"
+                   TextColor="Black"/>
+
+            <Button Text="Login"
                     FontSize="18"
                     FontAttributes="Bold"
                     BackgroundColor="DarkBlue"
                     TextColor="White"
                     CornerRadius="10"
                     VerticalOptions="Center"
-                    Command="{Binding UnlockCommand}"/>
+                    Command="{Binding LoginCommand}"/>
 
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                IsVisible="{Binding IsBusy}"
                                Color="DarkBlue"
                                VerticalOptions="Center"/>
 
-            <Button Text="Logout"
+            <Button Text="Register"
                     FontSize="18"
                     FontAttributes="Bold"
-                    BackgroundColor="Gray"
+                    BackgroundColor="DarkGray"
                     TextColor="White"
                     CornerRadius="10"
                     VerticalOptions="End"
-                    Command="{Binding LogoutCommand}"/>
+                    Command="{Binding NavigateToRegisterCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
