@@ -1,4 +1,6 @@
-﻿using Microsoft.Maui.Controls.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
 using SpecialiseringsEksamen.Services;
 using SpecialiseringsEksamen.ViewModels;
@@ -19,14 +21,13 @@ namespace SpecialiseringsEksamen
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+        
             builder.Services.AddSingleton<ApiService>();
 
-           
             builder.Services.AddTransient<MainViewModel>();
             builder.Services.AddTransient<RegisterViewModel>();
             builder.Services.AddTransient<LoginViewModel>();
 
-     
             builder.Services.AddTransient<MainPage>();
             builder.Services.AddTransient<SignInPage>();
             builder.Services.AddTransient<RegisterPage>();

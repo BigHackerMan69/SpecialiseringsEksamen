@@ -56,13 +56,30 @@ namespace SpecialiseringsEksamen.Services
 
         public async Task<(bool isSuccess, string message)> UnlockLockerAsync(string lockerNumber)
         {
-            var data = new { lockerNumber };
+            var data = new { action = "on", lockerNumber };
             var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("drawer/unlock", content);
 
             if (response.IsSuccessStatusCode)
             {
                 return (true, "Locker unlocked successfully");
+            }
+            else
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                return (false, message);
+            }
+        }
+
+        public async Task<(bool isSuccess, string message)> LockLockerAsync(string lockerNumber)
+        {
+            var data = new { action = "off", lockerNumber };
+            var content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PostAsync("drawer/lock", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return (true, "Locker locked successfully");
             }
             else
             {
