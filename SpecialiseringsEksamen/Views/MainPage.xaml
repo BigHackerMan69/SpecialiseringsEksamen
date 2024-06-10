@@ -4,9 +4,6 @@
              xmlns:vm="clr-namespace:SpecialiseringsEksamen.ViewModels"
              x:Class="SpecialiseringsEksamen.Views.MainPage"
              x:DataType="vm:MainViewModel">
-    <ContentPage.BindingContext>
-        <vm:MainViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
             <Label Text="Hospital Locker App"
@@ -22,7 +19,7 @@
                     TextColor="White"
                     CornerRadius="10"
                     VerticalOptions="Center"
-                    Command="{Binding UnlockCommand}"/>
+                    Clicked="UnlockLockerButton_Clicked"/>
 
             <ActivityIndicator IsRunning="{Binding IsBusy}"
                                IsVisible="{Binding IsBusy}"

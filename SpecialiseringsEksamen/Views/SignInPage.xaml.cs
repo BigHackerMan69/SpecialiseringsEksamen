@@ -1,13 +1,15 @@
 using Microsoft.Maui.Controls;
+using SpecialiseringsEksamen.ViewModels;
+using SpecialiseringsEksamen.Services;
 
 namespace SpecialiseringsEksamen.Views
 {
     public partial class SignInPage : ContentPage
     {
-        public SignInPage()
+        public SignInPage(LoginViewModel viewModel)
         {
             InitializeComponent();
-            BindingContext = new ViewModels.LoginViewModel();
+            BindingContext = viewModel;
         }
     }
 }

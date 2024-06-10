@@ -1,14 +1,19 @@
 ﻿using Microsoft.Maui.Controls;
 using SpecialiseringsEksamen.ViewModels;
+using SpecialiseringsEksamen.Services;
+using System;
 
 namespace SpecialiseringsEksamen.Views
 {
     public partial class MainPage : ContentPage
     {
+        private readonly ApiService _apiService;
+
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel();
+            _apiService = DependencyService.Get<ApiService>();
+            BindingContext = new MainViewModel(_apiService);
         }
 
         private async void UnlockLockerButton_Clicked(object sender, EventArgs e)
@@ -17,15 +22,24 @@ namespace SpecialiseringsEksamen.Views
             TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
             Vibration.Default.Vibrate(vibrationLength);
 
-
             var viewModel = BindingContext as MainViewModel;
-            viewModel.IsBusy = true;
+            if (viewModel != null)
+            {
+                viewModel.IsBusy = true;
 
-            await Task.Delay(2000); // Simulate an API call or hardware interaction.
+                var (isSuccess, message) = await _apiService.UnlockLockerAsync("lockerNumber"); 
 
-            viewModel.IsBusy = false;
+                viewModel.IsBusy = false;
 
-            await DisplayAlert("Success", $"Your locker has been unlocked.", "OK");
+                if (isSuccess)
+                {
+                    await DisplayAlert("Success", "Your locker has been unlocked.", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("Error", message, "OK");
+                }
+            }
         }
     }
 }

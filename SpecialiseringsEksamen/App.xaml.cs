@@ -25,12 +25,10 @@ public partial class App : Application
 
         if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
         {
-            // Navigate to MainPage if credentials are found
             await Shell.Current.GoToAsync("//MainPage");
         }
         else
         {
-            // Navigate to SignInPage if no credentials are found
             await Shell.Current.GoToAsync("//SignInPage");
         }
     }

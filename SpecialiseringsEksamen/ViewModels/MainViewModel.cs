@@ -1,80 +1,69 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
-using System.Threading.Tasks;
 using SpecialiseringsEksamen.Services;
+using System.Threading.Tasks;
 
 namespace SpecialiseringsEksamen.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
         private bool isBusy;
-        private readonly RedisService redisService;
+        private readonly ApiService _apiService;
+
+        public MainViewModel(ApiService apiService)
+        {
+            _apiService = apiService;
+            UnlockCommand = new Command(async () => await OnUnlock());
+            LogoutCommand = new Command(async () => await OnLogout());
+        }
 
         public bool IsBusy
         {
             get => isBusy;
-            set
-            {
-                if (isBusy != value)
-                {
-                    isBusy = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref isBusy, value);
         }
 
         public ICommand UnlockCommand { get; }
         public ICommand LogoutCommand { get; }
 
-        public MainViewModel()
-        {
-            UnlockCommand = new Command(OnUnlock);
-            LogoutCommand = new Command(OnLogout);
-        }
-
-        private async void OnUnlock()
+        private async Task OnUnlock()
         {
             if (IsBusy)
                 return;
 
             IsBusy = true;
 
-            // Simulate an API call to unlock the locker
-            await Task.Delay(2000);
-
-            // Here you would add your logic to unlock the locker
-            bool isUnlocked = true; // Assume unlocking is successful
-
-            IsBusy = false;
-
-            if (isUnlocked)
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Locker unlocked successfully.", "OK");
+                var response = await _apiService.UnlockLockerAsync("lockerNumber"); 
+
+               
+                if (response.isSuccess)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Locker unlocked successfully.", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", response.message, "Failed to unlock the locker. Please try again.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to unlock the locker. Please try again.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", $"An error occurred: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
-        private async void OnLogout()
+        private async Task OnLogout()
         {
-            // Clear credentials from secure storage
             SecureStorage.Remove("username");
             SecureStorage.Remove("password");
 
-            // Navigate back to the SignInPage
             await Shell.Current.GoToAsync("//SignInPage");
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

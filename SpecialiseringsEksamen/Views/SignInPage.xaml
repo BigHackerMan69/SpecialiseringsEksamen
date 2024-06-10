@@ -4,9 +4,6 @@
              xmlns:vm="clr-namespace:SpecialiseringsEksamen.ViewModels"
              x:Class="SpecialiseringsEksamen.Views.SignInPage"
              x:DataType="vm:LoginViewModel">
-    <ContentPage.BindingContext>
-        <vm:LoginViewModel />
-    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout Padding="30" Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
             <Label Text="Login"

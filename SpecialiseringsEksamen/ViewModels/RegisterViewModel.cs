@@ -1,69 +1,46 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using System.Threading.Tasks;
 using SpecialiseringsEksamen.Services;
 
 namespace SpecialiseringsEksamen.ViewModels
 {
-    public class RegisterViewModel : INotifyPropertyChanged
+    public class RegisterViewModel : BaseViewModel
     {
         private bool isBusy;
         private string username;
         private string password;
-        private readonly RedisService redisService;
+        private readonly ApiService _apiService;
+
+        public RegisterViewModel(ApiService apiService)
+        {
+            _apiService = apiService;
+            RegisterCommand = new Command(async () => await OnRegister());
+            BackCommand = new Command(async () => await OnBack());
+        }
 
         public bool IsBusy
         {
             get => isBusy;
-            set
-            {
-                if (isBusy != value)
-                {
-                    isBusy = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref isBusy, value);
         }
 
         public string Username
         {
             get => username;
-            set
-            {
-                if (username != value)
-                {
-                    username = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref username, value);
         }
 
         public string Password
         {
             get => password;
-            set
-            {
-                if (password != value)
-                {
-                    password = value;
-                    OnPropertyChanged();
-                }
-            }
+            set => SetProperty(ref password, value);
         }
 
         public ICommand RegisterCommand { get; }
         public ICommand BackCommand { get; }
 
-        public RegisterViewModel()
-        {
-            redisService = new RedisService();
-            RegisterCommand = new Command(OnRegister);
-            BackCommand = new Command(OnBack);
-        }
-
-        private async void OnRegister()
+        private async Task OnRegister()
         {
             if (IsBusy)
                 return;
@@ -77,32 +54,24 @@ namespace SpecialiseringsEksamen.ViewModels
                 return;
             }
 
-            // Attempt to register the user
-            bool isRegistered = await redisService.RegisterUserAsync(Username, Password);
+            var (isSuccess, message) = await _apiService.RegisterUserAsync(Username, Password);
 
             IsBusy = false;
 
-            if (isRegistered)
+            if (isSuccess)
             {
                 await Application.Current.MainPage.DisplayAlert("Success", "User registered successfully.", "OK");
                 await Shell.Current.GoToAsync("//SignInPage");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "User already exists. Please choose a different username.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
             }
         }
 
-        private async void OnBack()
+        private async Task OnBack()
         {
             await Shell.Current.GoToAsync("//SignInPage");
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
