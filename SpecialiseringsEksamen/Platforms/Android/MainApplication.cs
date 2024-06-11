@@ -3,7 +3,7 @@ using Android.Runtime;
 
 namespace SpecialiseringsEksamen;
 
-[Application]
+[Application(UsesCleartextTraffic = true)]
 public class MainApplication : MauiApplication
 {
 

@@ -15,7 +15,7 @@ namespace SpecialiseringsEksamen.Services
         {
             _httpClient = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:3001/api/") 
+                BaseAddress = new Uri("http://10.0.2.2:3001/api/") 
             };
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
